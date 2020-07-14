@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"runtime"
 	"strings"
@@ -425,6 +426,23 @@ func (app *earthApp) actionPrune(c *cli.Context) error {
 	return nil
 }
 
+func (app *earthApp) startSocat() func() {
+
+	cmd := exec.Command("socat", "TCP-LISTEN:12345,fork", "UNIX-CONNECT:/var/run/docker.sock")
+	if err := cmd.Start(); err != nil {
+		panic(err)
+	}
+
+	//socat TCP-LISTEN:12345,fork UNIX-CONNECT:/var/run/docker.sock
+
+	done := func() {
+		if err := cmd.Process.Kill(); err != nil {
+			panic(err)
+		}
+	}
+	return done
+}
+
 func (app *earthApp) actionBuild(c *cli.Context) error {
 	if app.imageMode && app.artifactMode {
 		return errors.New("both image and artifact modes cannot be active at the same time")
@@ -476,6 +494,10 @@ func (app *earthApp) actionBuild(c *cli.Context) error {
 			return errors.Wrapf(err, "parse target name %s", targetName)
 		}
 	}
+
+	closeSocat := app.startSocat()
+	defer closeSocat()
+
 	bkClient, err := app.newBuildkitdClient(c.Context)
 	if err != nil {
 		return errors.Wrap(err, "buildkitd new client")
