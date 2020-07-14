@@ -433,8 +433,6 @@ func (app *earthApp) startSocat() func() {
 		panic(err)
 	}
 
-	//socat TCP-LISTEN:12345,fork UNIX-CONNECT:/var/run/docker.sock
-
 	done := func() {
 		if err := cmd.Process.Kill(); err != nil {
 			panic(err)
