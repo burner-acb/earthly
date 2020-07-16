@@ -39,7 +39,7 @@ require (
 	github.com/matttproud/golang_protobuf_extensions v1.0.1 // indirect
 	github.com/mitchellh/mapstructure v1.1.2 // indirect
 	github.com/mitchellh/osext v0.0.0-20151018003038-5e2d6d41470f // indirect
-	github.com/moby/buildkit v0.7.1-0.20200708233707-488130002abb
+	github.com/moby/buildkit v0.7.1-0
 	github.com/ncw/swift v1.0.47 // indirect
 	github.com/opencontainers/go-digest v1.0.0
 	github.com/opencontainers/image-spec v1.0.1
@@ -77,4 +77,5 @@ replace (
 	github.com/docker/docker => github.com/docker/docker v17.12.0-ce-rc1.0.20200310163718-4634ce647cf2+incompatible
 	github.com/hashicorp/go-immutable-radix => github.com/tonistiigi/go-immutable-radix v0.0.0-20170803185627-826af9ccf0fe
 	github.com/jaguilar/vt100 => github.com/tonistiigi/vt100 v0.0.0-20190402012908-ad4c4a574305
+	github.com/moby/buildkit => github.com/alexcb/buildkit v0.7.1-0.20200716220636-de4cb42f8ddc
 )

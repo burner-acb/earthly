@@ -55,19 +55,19 @@ sed 's^:BUILDKIT_ROOT_DIR:^'"$BUILDKIT_ROOT_DIR"'^g; s/:CACHE_SIZE_MB:/'"$CACHE_
 
 echo "ENABLE_LOOP_DEVICE=$ENABLE_LOOP_DEVICE"
 echo "FORCE_LOOP_DEVICE=$FORCE_LOOP_DEVICE"
-use_loop_device=false
-if [ "$FORCE_LOOP_DEVICE" == "true" ]; then
-    use_loop_device=true
-else
-    if [ "$ENABLE_LOOP_DEVICE" == "true" ]; then
-        tmp_dir_fs="$(df -T $BUILDKIT_ROOT_DIR | awk '{print $2}' | tail -1)"
-        echo "Buildkit dir $BUILDKIT_ROOT_DIR fs type is $tmp_dir_fs"
-        if [ "$tmp_dir_fs" != "ext4" ]; then
-            echo "Using a loop device, because fs is not ext4"
-            use_loop_device=true
-        fi
-    fi
-fi
+use_loop_device=true
+#if [ "$FORCE_LOOP_DEVICE" == "true" ]; then
+#    use_loop_device=true
+#else
+#    if [ "$ENABLE_LOOP_DEVICE" == "true" ]; then
+#        tmp_dir_fs="$(df -T $BUILDKIT_ROOT_DIR | awk '{print $2}' | tail -1)"
+#        echo "Buildkit dir $BUILDKIT_ROOT_DIR fs type is $tmp_dir_fs"
+#        if [ "$tmp_dir_fs" != "ext4" ]; then
+#            echo "Using a loop device, because fs is not ext4"
+#            use_loop_device=true
+#        fi
+#    fi
+#fi
 echo "use_loop_device=$use_loop_device"
 if [ "$use_loop_device" == "true" ]; then
     # Create an ext4 fs in a pre-allocated file. Ext4 will allow
@@ -91,7 +91,7 @@ if [ "$use_loop_device" == "true" ]; then
         sparse_loop_device_size_mb=$(( CACHE_SIZE_MB * 4 ))
         echo "sparse_loop_device_size_mb=$sparse_loop_device_size_mb"
         dd if=/dev/zero of="$image_file" bs=1M count=0 seek="$sparse_loop_device_size_mb"
-        mkfs.ext4 "$image_file"
+        mkfs.btrfs "$image_file"
     }
 
     function reset_mount {

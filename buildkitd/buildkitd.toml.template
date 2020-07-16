@@ -3,7 +3,7 @@ insecure-entitlements = [ "security.insecure" ]
 
 [worker.oci]
   enabled = true
-  snapshotter = "auto"
+  snapshotter = "btrfs"
   gc = true
   # 1/100 of total cache size.
   gckeepstorage = :CACHE_SIZE_MB:0000

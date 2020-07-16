@@ -179,7 +179,7 @@ func Start(ctx context.Context, image string, settings Settings, reset bool) err
 	cacheMount := fmt.Sprintf("%s:%s:delegated", TempDir, TempDir)
 	args := []string{
 		"run",
-		"-d", "--rm",
+		"-d", //"--rm",
 		"-v", cacheMount,
 		"-e", fmt.Sprintf("ENABLE_LOOP_DEVICE=%t", !settings.DisableLoopDevice),
 		"-e", fmt.Sprintf("FORCE_LOOP_DEVICE=%t", !settings.DisableLoopDevice),
